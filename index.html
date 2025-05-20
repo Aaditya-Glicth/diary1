@@ -1,0 +1,43 @@
+<head>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js"></script>
+<body>
+  <h1>Personal Diary</h1>
+  <form id="diaryForm">
+    <textarea id="diaryEntry" rows="10" cols="50" placeholder="Write your diary entry here..."></textarea><br>
+    <button type="submit">Save Entry</button>
+  </form>
+  <h2>Shared Diary Entries</h2>
+  <div id="entries"></div>
+
+  <script>
+    // Load existing entries from localStorage
+    function loadEntries() {
+      const entries = JSON.parse(localStorage.getItem('diaryEntries') || '[]');
+      const entriesDiv = document.getElementById('entries');
+      entriesDiv.innerHTML = '';
+      entries.forEach((entry, idx) => {
+        const entryDiv = document.createElement('div');
+        entryDiv.className = 'entry';
+        entryDiv.innerHTML = `<strong>Entry ${idx + 1}:</strong><br>${entry.replace(/\n/g, '<br>')}<hr>`;
+        entriesDiv.appendChild(entryDiv);
+      });
+    }
+
+    // Save new entry
+    document.getElementById('diaryForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const entry = document.getElementById('diaryEntry').value.trim();
+      if (entry) {
+        const entries = JSON.parse(localStorage.getItem('diaryEntries') || '[]');
+        entries.push(entry);
+        localStorage.setItem('diaryEntries', JSON.stringify(entries));
+        document.getElementById('diaryEntry').value = '';
+        loadEntries();
+      }
+    });
+
+    // Initial load
+    loadEntries();
+  </script>
+</body></form>
